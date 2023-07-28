@@ -1,0 +1,29 @@
+{
+  "name": "cicerone.js",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite build --watch & tsc -w",
+    "build": "vite build & tsc",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8"
+  },
+  "devDependencies": {
+    "@types/node": "18",
+    "typescript": "5.1.6",
+    "vite": "^4.4.7",
+    "vite-plugin-dts": "^3.3.1",
+    "vitest": "^0.33.0"
+  },
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.umd.js",
+      "import": "./dist/index.js"
+    }
+  }
+}
