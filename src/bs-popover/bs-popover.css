@@ -1,0 +1,80 @@
+
+.bs-popover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1060;
+  display: none;
+  max-width: 276px;
+  padding: 1px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: start;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  letter-spacing: normal;
+  word-break: normal;
+  word-spacing: normal;
+  word-wrap: normal;
+  white-space: normal;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  line-break: auto;
+}
+
+.bs-popover__header {
+   padding: 8px 14px;
+   margin: 0;
+   font-size: 14px;
+   background-color: #f7f7f7;
+   border-bottom: 1px solid #ebebeb;
+   border-radius: 5px 5px 0 0;
+ }
+
+.bs-popover__content {
+  padding: 9px 14px;
+}
+
+.bs-popover__navigate {
+  padding: 9px 14px;
+  overflow: hidden;
+ }
+
+.bs-popover__navigate__btn {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
+.bs-popover__navigate__btn--default {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+.bs-popover__navigate__btn--disabled {
+  box-shadow: none;
+  opacity: .65;
+  cursor: default;
+}

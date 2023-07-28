@@ -1,7 +1,17 @@
-import type {Placement, OffsetsFunction, Rect} from "./re-export";
+import type {OffsetsFunction, Placement, Rect} from "./re-export";
+
+export interface IPopover {
+  render(params: PopoverRenderParams): void
+
+}
+
+export interface PopoverRenderParams {
+  rects: Rect[];
+  stageIndex: number;
+}
 
 /**
- * 
+ *
  * A stage is a Highlighting target.
  * if it's a string, it's a query selector.
  * if it's an Element, it's a DOM element.
@@ -12,17 +22,34 @@ export type Stage = string
   | Element
   | Rect
 
+export type BackdropType = "opacityColor" | "blur"
+export type BackdropFunction = {
+  // if use opacityColor
+  // default as #000
+  color?: string,
+  // default as 0.5
+  opacity?: number,
+  // if use blur default
+  // default as 5
+  blur?: number,
+}
+
 export type HighlightState = {
   stage: Stage[]
   placement?: Placement,
   popoverOffset?: OffsetsFunction | [number, number],
-  backdropType: ""
+  backdropType?: BackdropType,
+  backdropFunction?: BackdropFunction,
+  backdropVisibility?: boolean,
+  popoverFactory?: () => IPopover,
 }
 
 export type HighlightGlobalConfig = {
-  // The default placement of the popover
-  placement?: Placement,
-  // The default offset of the popover
-  popoverOffset?: OffsetsFunction | [number, number],
-  
+  zIndex: number,
+  placement: Placement,
+  popoverOffset: OffsetsFunction | [number, number],
+  backdropType: BackdropType,
+  backdropFunction: BackdropFunction,
+  backdropVisibility: boolean,
+  popoverFactory?: () => IPopover,
 }

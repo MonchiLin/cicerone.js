@@ -1,12 +1,12 @@
-import {Rect} from "./re-export";
+import {IPopover} from "./interface";
 
-type CtorParams = {
-  rect: Rect;
-}
+export class Popover implements IPopover {
 
-export class Popover {
   constructor() {
-    
   }
 
+  render(): void {
+    throw new Error("If you want customize popover, you should override this method.")
+  }
+  
 }

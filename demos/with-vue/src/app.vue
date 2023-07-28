@@ -14,7 +14,7 @@ const highlight = (event: Event, placement: Placement) => {
 
   console.log(highlightArea)
 
-  highlightArea.highlight()
+  highlightArea.render()
 } 
 
 </script>

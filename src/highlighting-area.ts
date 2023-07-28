@@ -1,15 +1,19 @@
 import {Rect} from "./re-export";
-import {Popover} from "./popover";
 import {createOverlaySvg} from "./svg";
+import {onDriverClick} from "./unclassified";
+import {IPopover} from "./interface";
+import "./style.css"
 
 type CtorParams = {
   rects: Rect[];
-  popover?: Popover;
+  popover?: IPopover;
 }
 
 export class HighlightingRect {
   private rects: Rect[];
-  private popover?: Popover;
+  private popover?: IPopover;
+  private popoverBox?: Element;
+  private overlaySvg?: SVGSVGElement;
 
   constructor(params: CtorParams) {
     this.rects = params.rects
@@ -21,29 +25,45 @@ export class HighlightingRect {
    */
   public update(rect: Rect[]) {
     this.rects = rect;
-    this.calculate();
+    this.render();
   }
 
   /**
    * Destroy the highlight area
    */
   public destroy() {
-
-  }
-
-  /**
-   * highlight the highlighting area
-   */
-  public highlight() {
-    const svg = createOverlaySvg(this.rects[0])
-    document.body.appendChild(svg)
+    if (this.overlaySvg) {
+      document.body.removeChild(this.overlaySvg);
+      this.overlaySvg = undefined;
+    }
+    if (this.popoverBox) {
+      document.body.removeChild(this.popoverBox);
+      this.popoverBox = undefined;
+    }
   }
   
   /**
    * Draw the highlight area
    */
   private render() {
-
+    this.destroy();
+    this.overlaySvg = createOverlaySvg(this.rects[0])
+    onDriverClick(this.overlaySvg, e => {
+      console.log(this.overlaySvg)
+    })
+    document.body.appendChild(this.overlaySvg)
+    this.popover?.render()
+  }
+  
+  private renderPopover() {
+    if (!this.popover) {
+      return;
+    }
+    if (!this.popoverBox) {
+      this.popoverBox = document.createElement("div");
+      this.popoverBox.classList.add("driver-popover");
+    }
+    this.popover.render();
   }
 
   /**
