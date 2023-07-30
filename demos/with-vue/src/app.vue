@@ -8,14 +8,14 @@ const highlight = (event: Event, placement: Placement) => {
   }
   count += 1;
   const highlightArea = createHighlightingArea({
-    stage: [event.target!],
+    stage: [[event.target!]],
     placement: placement,
   })
 
   console.log(highlightArea)
 
   highlightArea.render()
-} 
+}
 
 </script>
 

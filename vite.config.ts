@@ -16,7 +16,7 @@ module.exports = defineConfig({
   base: "./",
   build: {
     lib: {
-      entry: ['src/index.ts'],
+      entry: ['src/index.ts', 'src/bs-popover.ts'],
       name: getPackageNameCamelCase(),
       fileName: (format, entryName) => {
         return (format === "es" ? `${entryName}.js` : `${entryName}.umd.js`)
@@ -25,6 +25,21 @@ module.exports = defineConfig({
     rollupOptions: {
       input: {
         'index': path.resolve(__dirname, 'src/index.ts'),
+        'bs-popover': path.resolve(__dirname, 'src/bs-popover.ts'),
+      },
+      output: {
+        assetFileNames: (assetInfo) => {
+          if (!assetInfo.source) {
+            return assetInfo.name!;
+          }
+          if (assetInfo.name === "style.css") {
+            return 'style.css';
+          }
+          if ((assetInfo.source as string).includes('.bs-popover')) {
+            return 'bs-popover/bs-popover.css';
+          }
+          return assetInfo.name!;
+        },
       }
     },
   },

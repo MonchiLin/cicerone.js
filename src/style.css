@@ -1,3 +1,9 @@
+.cable-car {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
 .cicerone-popover-box {
     all: unset;
     box-sizing: border-box;

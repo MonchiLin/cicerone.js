@@ -1,30 +1,43 @@
 import {Rect} from "./re-export";
 import {createOverlaySvg} from "./svg";
 import {onDriverClick} from "./unclassified";
-import {IPopover} from "./interface";
-import "./style.css"
+import {IPopover, PopoverRenderContext} from "./interface";
 
 type CtorParams = {
-  rects: Rect[];
+  rects: Rect[][];
   popover?: IPopover;
+  stageIndex?: number;
 }
 
 export class HighlightingRect {
-  private rects: Rect[];
+  private rectGroups: Rect[][];
   private popover?: IPopover;
-  private popoverBox?: Element;
   private overlaySvg?: SVGSVGElement;
+  private rootEl?: HTMLElement;
+  public stageIndex: number;
+
+  /**
+   * Generate render context
+   */
+  private get renderContext(): PopoverRenderContext {
+    return {
+      rects: this.rectGroups[this.stageIndex],
+      stageIndex: this.stageIndex,
+      rootEl: this.rootEl!,
+    }
+  }
 
   constructor(params: CtorParams) {
-    this.rects = params.rects
+    this.rectGroups = params.rects
     this.popover = params.popover
+    this.stageIndex = params.stageIndex || 0;
   }
 
   /**
    * Dynamic update the rect
    */
-  public update(rect: Rect[]) {
-    this.rects = rect;
+  public update(rectGroups: Rect[][]) {
+    this.rectGroups = rectGroups;
     this.render();
   }
 
@@ -32,38 +45,33 @@ export class HighlightingRect {
    * Destroy the highlight area
    */
   public destroy() {
+    if (!this.rootEl) {
+      return;
+    }
     if (this.overlaySvg) {
-      document.body.removeChild(this.overlaySvg);
+      this.rootEl.removeChild(this.overlaySvg);
       this.overlaySvg = undefined;
     }
-    if (this.popoverBox) {
-      document.body.removeChild(this.popoverBox);
-      this.popoverBox = undefined;
-    }
   }
-  
+
+
   /**
    * Draw the highlight area
    */
   private render() {
     this.destroy();
-    this.overlaySvg = createOverlaySvg(this.rects[0])
+    this.rootEl = document.createElement("div");
+    this.rootEl.classList.add("cable-car")
+    document.body.appendChild(this.rootEl)
+    this.overlaySvg = createOverlaySvg(this.rectGroups[this.stageIndex][0])
     onDriverClick(this.overlaySvg, e => {
       console.log(this.overlaySvg)
     })
-    document.body.appendChild(this.overlaySvg)
-    this.popover?.render()
-  }
-  
-  private renderPopover() {
-    if (!this.popover) {
-      return;
+    this.rootEl.appendChild(this.overlaySvg)
+
+    if (this.popover) {
+      this.popover.render(this.renderContext);
     }
-    if (!this.popoverBox) {
-      this.popoverBox = document.createElement("div");
-      this.popoverBox.classList.add("driver-popover");
-    }
-    this.popover.render();
   }
 
   /**

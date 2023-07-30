@@ -1,13 +1,13 @@
 import type {OffsetsFunction, Placement, Rect} from "./re-export";
 
 export interface IPopover {
-  render(params: PopoverRenderParams): void
-
+  render(context: PopoverRenderContext): void
 }
 
-export interface PopoverRenderParams {
+export interface PopoverRenderContext {
   rects: Rect[];
   stageIndex: number;
+  rootEl: HTMLElement;
 }
 
 /**

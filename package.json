@@ -23,7 +23,27 @@
   "exports": {
     ".": {
       "require": "./dist/index.umd.js",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./bs-popover": {
+      "import": "./dist/bs-popover.js",
+      "require": "./dist/bs-popover.unm.js",
+      "types": "./dist/bs-popover.d.ts"
+    },
+    "./dist/style.css": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/index.d.ts"
+      ],
+      "bs-popover": [
+        "dist/bs-popover.d.ts"
+      ]
     }
   }
 }
