@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Placement, Stage, StageFocus, toFocusElementStateMany} from 'cicerone.js'
+import {Placement, Scheduler, Stage, StageFocus, toFocusElementState} from 'cicerone.js'
 
 let count = 0;
 const highlight = (event: Event, placement: Placement) => {
@@ -7,13 +7,20 @@ const highlight = (event: Event, placement: Placement) => {
     return
   }
   count += 1;
-  new Stage({
-    focusGroup: [
-      [
-        new StageFocus(toFocusElementStateMany([event.target]))
-      ]
-    ]
+  const scheduler = new Scheduler({
+    stages: [
+      new Stage({
+        focuses: [
+          new StageFocus({
+            focusElementState: toFocusElementState((event.target!) as Element),
+          })
+        ]
+      })
+    ],
+    placement: placement,
   })
+
+  scheduler.render()
 }
 
 </script>

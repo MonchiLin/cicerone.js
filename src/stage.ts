@@ -1,41 +1,33 @@
-import {IStageFocus, IStagePopover, StageRenderingContext, StageState} from "./interface";
+import {
+  IStage,
+  IStageFocus,
+  IStagePopover,
+  StagePopoverRenderingContext,
+  StageRenderingContext,
+  StageState
+} from "./interface";
+import {createOverlaySvg} from "./svg";
+import {onDriverClick} from "./unclassified";
 
-
-export class Stage {
-  private focusGroup: IStageFocus[][];
-  private popoverGroup?: IStagePopover[][];
-  private rootEl: HTMLElement;
-  public stageIndex: number;
+export class Stage implements IStage {
+  private focuses: IStageFocus[];
+  private popovers?: IStagePopover[];
+  private stageRenderingContext!: StageRenderingContext;
+  private overlaySvg?: SVGSVGElement;
 
   constructor(state: StageState) {
-    this.stageIndex = state.stageIndex || 0;
-    this.focusGroup = state.focusGroup;
-    this.popoverGroup = state.popoverGroup;
-
-    if (state.rootEl) {
-      this.rootEl = state.rootEl;
-    } else {
-      this.rootEl = document.createElement("div");
-      this.rootEl.classList.add("cable-car")
-      document.body.appendChild(this.rootEl)
-    }
-  }
-
-  public get currenStage() {
-    return {
-      focuses: this.focusGroup[this.stageIndex],
-      popovers: this.popoverGroup ? this.popoverGroup[this.stageIndex] : undefined,
-    }
+    this.focuses = state.focuses;
+    this.popovers = state.popovers;
   }
 
   /**
    * Generate render context
    */
-  private get renderContext(): StageRenderingContext {
+  private get stagePopoverRenderingContext(): StagePopoverRenderingContext {
     return {
-      ...this.currenStage,
-      stageIndex: this.stageIndex,
-      rootEl: this.rootEl!,
+      focuses: this.focuses,
+      rootEl: this.stageRenderingContext.rootEl,
+      sharedConfig: this.stageRenderingContext.sharedConfig,
     }
   }
 
@@ -43,25 +35,25 @@ export class Stage {
    * Destroy the highlight area
    */
   public destroy() {
-    if (!this.rootEl) {
-      return;
-    }
+
   }
 
   /**
    * Draw the highlight area
    */
-  private render() {
+  public render(context: StageRenderingContext) {
+    this.stageRenderingContext = context;
     this.destroy();
-    document.body.appendChild(this.rootEl)
 
-    this.currenStage.focuses.forEach(focus => {
-      focus.render(this.renderContext)
+    this.overlaySvg = createOverlaySvg(this.focuses[0].rect())
+    this.stageRenderingContext.rootEl.appendChild(this.overlaySvg)
+    onDriverClick(this.overlaySvg, e => {
+      console.log(this.overlaySvg)
     })
 
-    if (this.currenStage.popovers) {
-      this.currenStage.popovers.forEach(popover => {
-        popover.render(this.renderContext)
+    if (this.popovers) {
+      this.popovers.forEach(popover => {
+        popover.render(this.stagePopoverRenderingContext)
       })
     }
   }

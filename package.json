@@ -40,14 +40,7 @@
       "require": "./dist/bs-popover/style.css"
     }
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "dist/index.d.ts"
-      ],
-      "bs-popover": [
-        "dist/bs-popover.d.ts"
-      ]
-    }
-  }
+  "files": [
+    "dist/**/*"
+  ]
 }

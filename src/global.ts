@@ -11,5 +11,7 @@ export const CiceroneGlobal: CiceroneGlobalConfig = {
     blur: 5,
   },
   backdropVisibility: true,
-  popoverFactory: undefined
+  popoverFactory: undefined,
+  onOverlayClick: undefined,
+  maskClosable: false,
 }

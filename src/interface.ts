@@ -1,22 +1,35 @@
 import type {OffsetsFunction, Placement, Rect} from "./re-export";
 
 export interface StageRenderingContext {
-  focuses: IStageFocus[],
-  popover?: IStagePopover[],
-  stageIndex: number;
-  rootEl: HTMLElement;
+  readonly rootEl: HTMLElement;
+  readonly sharedConfig: SharedConfig;
+}
+
+export interface StagePopoverRenderingContext {
+  readonly rootEl: HTMLElement;
+  readonly focuses: IStageFocus[];
+  readonly sharedConfig: SharedConfig;
+}
+
+export interface StageFocusRenderingContext {
+  readonly rootEl: HTMLElement;
+  readonly sharedConfig: SharedConfig;
 }
 
 export type StageFocusCtorParams = {
   focusElementState: FocusElementState;
 }
 
-export interface IStagePopover {
+export interface IStage {
   render(context: StageRenderingContext): void
 }
 
+export interface IStagePopover {
+  render(popoverRenderingContext: StagePopoverRenderingContext): void
+}
+
 export interface IStageFocus {
-  render(context: StageRenderingContext): void
+  rect(): Rect;
 }
 
 /**
@@ -49,24 +62,30 @@ export type BackdropFunction = {
   blur?: number,
 }
 
-export type StageState = {
-  focusGroup: IStageFocus[][];
-  popoverGroup?: IStagePopover[][];
-  rootEl?: HTMLElement;
-  stageIndex?: number;
-  placement?: Placement,
-  popoverOffset?: OffsetsFunction | [number, number],
+export interface SharedConfig {
+  maskClosable?: boolean,
+  onOverlayClick?: (e: MouseEvent) => void,
   backdropType?: BackdropType,
   backdropFunction?: BackdropFunction,
   backdropVisibility?: boolean,
+  placement?: Placement,
+  popoverOffset?: OffsetsFunction | [number, number],
+  zIndex?: number,
 }
 
-export type CiceroneGlobalConfig = {
-  zIndex: number,
-  placement: Placement,
-  popoverOffset: OffsetsFunction | [number, number],
-  backdropType: BackdropType,
-  backdropFunction: BackdropFunction,
-  backdropVisibility: boolean,
+export interface StageState extends SharedConfig {
+  focuses: IStageFocus[],
+  popovers?: IStagePopover[],
+}
+
+export interface SchedulerState extends SharedConfig{
+  stages: IStage[];
+  rootEl?: HTMLElement;
+  stageIndex?: number;
+  onRenderStart?: (context: StageRenderingContext) => void,
+  onRenderEnd?: (context: StageRenderingContext) => void,
+}
+
+export interface CiceroneGlobalConfig extends SharedConfig {
   popoverFactory?: () => IStagePopover,
 }
