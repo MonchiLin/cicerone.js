@@ -3,6 +3,7 @@ import {defineConfig} from "vite";
 import packageJson from "./package.json";
 import * as path from "path";
 import dts from 'vite-plugin-dts'
+import copyFiles from './copy-files-plugin'
 
 const getPackageNameCamelCase = () => {
   try {
@@ -15,6 +16,7 @@ const getPackageNameCamelCase = () => {
 module.exports = defineConfig({
   base: "./",
   build: {
+    cssCodeSplit: false,
     lib: {
       entry: ['src/index.ts', 'src/bs-popover.ts'],
       name: getPackageNameCamelCase(),
@@ -26,26 +28,18 @@ module.exports = defineConfig({
       input: {
         'index': path.resolve(__dirname, 'src/index.ts'),
         'bs-popover': path.resolve(__dirname, 'src/bs-popover.ts'),
-      },
-      output: {
-        assetFileNames: (assetInfo) => {
-          if (!assetInfo.source) {
-            return assetInfo.name!;
-          }
-          if (assetInfo.name === "style.css") {
-            return 'style.css';
-          }
-          if ((assetInfo.source as string).includes('.bs-popover')) {
-            return 'bs-popover/bs-popover.css';
-          }
-          return assetInfo.name!;
-        },
       }
-    },
+      },
   },
   plugins: [
     dts({
       outDir: ['dist'],
-    })
+    }),
+    copyFiles({
+      files: [
+        { src: 'src/style.css', dest: 'dist/style.css' },
+        { src: 'src/bs-popover/style.css', dest: 'dist/bs-popover/style.css' },
+      ],
+    }),
   ]
 });

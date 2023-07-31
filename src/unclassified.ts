@@ -1,39 +1,41 @@
-import type {Stage} from "./interface";
-import {HighlightState} from "./interface";
-import type {Rect} from "./re-export";
-import {HighlightingRect} from "./highlighting-area";
-import {CiceroneGlobal} from "./global";
+import type {FocusElementState} from "./interface";
+import {FocusElement} from "./interface";
 
 /**
  * Convert a Stage to a Rect
  * @param stage
  */
-export const toArea = (stage: Stage): Rect => {
+export const toFocusElementState = (stage: FocusElement): FocusElementState => {
   if (typeof stage === "string") {
     const element = document.querySelector(stage);
     if (!element) {
       throw new Error(`Element not found: ${stage}`);
     }
-    return element.getBoundingClientRect();
+    return {
+      rect: element.getBoundingClientRect(),
+      el: element,
+      areaKind: "element",
+    }
   } else if (stage instanceof Element) {
-    return stage.getBoundingClientRect();
+    return {
+      rect: stage.getBoundingClientRect(),
+      el: stage,
+      areaKind: "element",
+    }
   } else {
-    return stage;
+    return {
+      rect: stage,
+      areaKind: "rect",
+    }
   }
 }
 
 /**
- * @param state
- * @param state.stage - required
- * @param state.placement - optional
- * @param state.offset - optional
+ * Convert a Stage to a Rect
+ * @param stage
  */
-export const createHighlightingArea = (state: HighlightState) => {
-  const rects = state.stage.map(toArea);
-  const popoverFactory = state.popoverFactory || CiceroneGlobal.popoverFactory
-  const popover = popoverFactory ? popoverFactory({rects}) : undefined;
-
-  return new HighlightingRect({rects, popover})
+export const toFocusElementStateMany = (stage: FocusElement[]): FocusElementState[] => {
+  return stage.map(toFocusElementState)
 }
 
 /**

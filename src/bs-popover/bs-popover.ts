@@ -1,5 +1,5 @@
-import {Popover} from "../popover";
-import {PopoverRenderContext} from "../interface";
+import {StagePopover} from "../stage-popover";
+import {StageRenderingContext} from "../interface";
 
 export interface BSPopoverOptions {
   title: string,
@@ -11,19 +11,19 @@ export interface BSPopoverOptions {
  * @see https://bootstraptour.com/
  *
  */
-export class BSPopover extends Popover {
+export class BSPopover extends StagePopover {
   private box!: HTMLElement;
   private header!: HTMLElement;
   private content!: HTMLElement;
   private navigation!: HTMLElement;
-  private renderContext!: PopoverRenderContext;
+  private renderContext!: StageRenderingContext;
 
   constructor(private options: BSPopoverOptions) {
     super();
   }
 
 
-  render(context: PopoverRenderContext) {
+  render(context: StageRenderingContext) {
     this.renderContext = context
     this.renderBox()
     this.renderHeader()

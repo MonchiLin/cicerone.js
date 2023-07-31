@@ -11,10 +11,10 @@
     "@popperjs/core": "^2.11.8"
   },
   "devDependencies": {
-    "@types/node": "18",
-    "typescript": "5.1.6",
+    "@types/node": "18.17.1",
+    "typescript": "^5.1.6",
     "vite": "^4.4.7",
-    "vite-plugin-dts": "^3.3.1",
+    "vite-plugin-dts": "^3.4.0",
     "vitest": "^0.33.0"
   },
   "main": "./dist/index.umd.js",
@@ -34,6 +34,10 @@
     "./dist/style.css": {
       "import": "./dist/style.css",
       "require": "./dist/style.css"
+    },
+    "./dist/bs-popover/style.css": {
+      "import": "./dist/bs-popover/style.css",
+      "require": "./dist/bs-popover/style.css"
     }
   },
   "typesVersions": {

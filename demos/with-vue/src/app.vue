@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {createHighlightingArea, Placement} from 'cicerone.js'
+import {Placement, Stage, StageFocus, toFocusElementStateMany} from 'cicerone.js'
 
 let count = 0;
 const highlight = (event: Event, placement: Placement) => {
@@ -7,14 +7,13 @@ const highlight = (event: Event, placement: Placement) => {
     return
   }
   count += 1;
-  const highlightArea = createHighlightingArea({
-    stage: [[event.target!]],
-    placement: placement,
+  new Stage({
+    focusGroup: [
+      [
+        new StageFocus(toFocusElementStateMany([event.target]))
+      ]
+    ]
   })
-
-  console.log(highlightArea)
-
-  highlightArea.render()
 }
 
 </script>

@@ -1,13 +1,22 @@
 import type {OffsetsFunction, Placement, Rect} from "./re-export";
 
-export interface IPopover {
-  render(context: PopoverRenderContext): void
-}
-
-export interface PopoverRenderContext {
-  rects: Rect[];
+export interface StageRenderingContext {
+  focuses: IStageFocus[],
+  popover?: IStagePopover[],
   stageIndex: number;
   rootEl: HTMLElement;
+}
+
+export type StageFocusCtorParams = {
+  focusElementState: FocusElementState;
+}
+
+export interface IStagePopover {
+  render(context: StageRenderingContext): void
+}
+
+export interface IStageFocus {
+  render(context: StageRenderingContext): void
 }
 
 /**
@@ -18,13 +27,19 @@ export interface PopoverRenderContext {
  * if it's a Rect, it's a bounding box.
  * But finally, it will be converted to a Rect.
  */
-export type Stage = string
+export type FocusElement = string
   | Element
   | Rect
 
+export interface FocusElementState {
+  rect: Rect;
+  el?: Element;
+  areaKind: "element" | "rect"
+}
+
 export type BackdropType = "opacityColor" | "blur"
 export type BackdropFunction = {
-  // if use opacityColor
+  // if you use opacityColor
   // default as #000
   color?: string,
   // default as 0.5
@@ -34,22 +49,24 @@ export type BackdropFunction = {
   blur?: number,
 }
 
-export type HighlightState = {
-  stage: Stage[]
+export type StageState = {
+  focusGroup: IStageFocus[][];
+  popoverGroup?: IStagePopover[][];
+  rootEl?: HTMLElement;
+  stageIndex?: number;
   placement?: Placement,
   popoverOffset?: OffsetsFunction | [number, number],
   backdropType?: BackdropType,
   backdropFunction?: BackdropFunction,
   backdropVisibility?: boolean,
-  popoverFactory?: () => IPopover,
 }
 
-export type HighlightGlobalConfig = {
+export type CiceroneGlobalConfig = {
   zIndex: number,
   placement: Placement,
   popoverOffset: OffsetsFunction | [number, number],
   backdropType: BackdropType,
   backdropFunction: BackdropFunction,
   backdropVisibility: boolean,
-  popoverFactory?: () => IPopover,
+  popoverFactory?: () => IStagePopover,
 }

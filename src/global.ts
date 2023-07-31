@@ -1,6 +1,6 @@
-import {HighlightGlobalConfig} from "./interface";
+import {CiceroneGlobalConfig} from "./interface";
 
-export const CiceroneGlobal: HighlightGlobalConfig = {
+export const CiceroneGlobal: CiceroneGlobalConfig = {
   zIndex: 1000,
   placement: "auto",
   popoverOffset: [0, 0],
