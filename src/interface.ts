@@ -63,29 +63,32 @@ export type BackdropFunction = {
 }
 
 export interface SharedConfig {
-  maskClosable?: boolean,
-  onOverlayClick?: (e: MouseEvent) => void,
-  backdropType?: BackdropType,
-  backdropFunction?: BackdropFunction,
-  backdropVisibility?: boolean,
-  placement?: Placement,
-  popoverOffset?: OffsetsFunction | [number, number],
-  zIndex?: number,
+  maskClosable?: boolean
+  onOverlayClick?: (e: MouseEvent) => void
+  backdropType?: BackdropType
+  backdropFunction?: BackdropFunction
+  backdropVisibility?: boolean
+  placement?: Placement
+  popoverOffset?: OffsetsFunction | [number, number]
+  zIndex?: number
 }
 
-export interface StageState extends SharedConfig {
-  focuses: IStageFocus[],
-  popovers?: IStagePopover[],
+export interface StageState {
+  focuses: IStageFocus[]
+  popovers?: IStagePopover[]
 }
 
-export interface SchedulerState extends SharedConfig{
-  stages: IStage[];
-  rootEl?: HTMLElement;
-  stageIndex?: number;
-  onRenderStart?: (context: StageRenderingContext) => void,
-  onRenderEnd?: (context: StageRenderingContext) => void,
+export interface SchedulerState extends SharedConfig {
+  stages: IStage[]
+  rootEl?: HTMLElement
+  stageIndex?: number
+  onRenderStart?: (context: StageRenderingContext) => void
+  onRenderEnd?: (context: StageRenderingContext) => void
 }
 
 export interface CiceroneGlobalConfig extends SharedConfig {
-  popoverFactory?: () => IStagePopover,
+}
+
+export interface AssembleConfig extends SharedConfig {
+  focusElements: FocusElement[][]
 }

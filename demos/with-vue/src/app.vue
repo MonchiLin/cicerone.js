@@ -1,26 +1,14 @@
 <script setup lang="ts">
-import {Placement, Scheduler, Stage, StageFocus, toFocusElementState} from 'cicerone.js'
+import {highlightElement, Placement} from 'cicerone.js'
 
 let count = 0;
 const highlight = (event: Event, placement: Placement) => {
   if (count > 0) {
     return
   }
-  count += 1;
-  const scheduler = new Scheduler({
-    stages: [
-      new Stage({
-        focuses: [
-          new StageFocus({
-            focusElementState: toFocusElementState((event.target!) as Element),
-          })
-        ]
-      })
-    ],
-    placement: placement,
-  })
 
-  scheduler.render()
+  const cicerone = highlightElement(event.target!, {placement: placement})
+  cicerone.bootstrap()
 }
 
 </script>

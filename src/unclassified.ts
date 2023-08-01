@@ -1,30 +1,33 @@
-import type {FocusElementState} from "./interface";
+import type {FocusElementState, SharedConfig} from "./interface";
 import {FocusElement} from "./interface";
+import {Cicerone} from "./cicerone";
+import {StageFocus} from "./stage-focus";
+import {Stage} from "./stage";
 
 /**
  * Convert a Stage to a Rect
- * @param stage
+ * @param focusElement
  */
-export const toFocusElementState = (stage: FocusElement): FocusElementState => {
-  if (typeof stage === "string") {
-    const element = document.querySelector(stage);
+export const toFocusElementState = (focusElement: FocusElement): FocusElementState => {
+  if (typeof focusElement === "string") {
+    const element = document.querySelector(focusElement);
     if (!element) {
-      throw new Error(`Element not found: ${stage}`);
+      throw new Error(`Element not found: ${focusElement}`);
     }
     return {
       rect: element.getBoundingClientRect(),
       el: element,
       areaKind: "element",
     }
-  } else if (stage instanceof Element) {
+  } else if (focusElement instanceof Element) {
     return {
-      rect: stage.getBoundingClientRect(),
-      el: stage,
+      rect: focusElement.getBoundingClientRect(),
+      el: focusElement,
       areaKind: "element",
     }
   } else {
     return {
-      rect: stage,
+      rect: focusElement,
       areaKind: "rect",
     }
   }
@@ -85,4 +88,17 @@ export function onDriverClick(
     },
     useCapture
   );
+}
+
+export function highlightElement(focusElement: FocusElement, config: SharedConfig = {}) {
+  return new Cicerone({
+    ...config,
+    stages: [
+      new Stage({
+        focuses: [
+          new StageFocus({focusElementState: toFocusElementState(focusElement)})
+        ]
+      })
+    ],
+  })
 }

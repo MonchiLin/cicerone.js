@@ -1,6 +1,9 @@
-import {IStage, SchedulerState, SharedConfig, StageRenderingContext} from "./interface";
+import {AssembleConfig, IStage, SchedulerState, SharedConfig, StageRenderingContext} from "./interface";
+import {Stage} from "./stage";
+import {StageFocus} from "./stage-focus";
+import {toFocusElementState} from "./unclassified";
 
-export class Scheduler {
+export class Cicerone {
   public stageIndex: number;
   private rootEl: HTMLElement;
   private stages: IStage[];
@@ -31,6 +34,25 @@ export class Scheduler {
     }
   }
 
+  public static assemble (state: AssembleConfig): Cicerone {
+    const stages = state.focusElements.map(focusElements => {
+
+      const focuses = focusElements.map(focusElement => new StageFocus({
+        focusElementState: toFocusElementState(focusElement),
+      }))
+
+      return new Stage({
+        focuses: focuses,
+        popovers: [],
+      })
+    })
+
+    return new Cicerone({
+      ...state,
+      stages: stages,
+    })
+  }
+
   private get renderingContext(): StageRenderingContext {
     return {
       rootEl: this.rootEl,
@@ -38,10 +60,14 @@ export class Scheduler {
     }
   }
 
+  public bootstrap() {
+    this.render();
+  }
+
   /**
    * Start the tourist guide
    */
-  public render() {
+  private render() {
     this.stages[this.stageIndex].render(this.renderingContext)
   }
 

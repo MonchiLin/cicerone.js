@@ -1,5 +1,5 @@
 export * from './interface'
-export * from './scheduler'
+export * from './cicerone'
 export * from './global'
 export * from './unclassified'
 export * from './stage-popover'
