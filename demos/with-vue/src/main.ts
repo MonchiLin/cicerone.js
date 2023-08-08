@@ -1,9 +1,9 @@
-import {createApp} from 'vue'
+import { createApp } from 'vue'
 import "./style.css"
 import App from './app.vue'
-import {createRouter, createWebHistory} from 'vue-router/auto'
-import {CiceroneGlobal} from "cicerone.js";
-import {BSPopover} from "cicerone.js/bs-popover";
+import { createRouter, createWebHistory } from 'vue-router/auto'
+import { CiceroneGlobal } from "cicerone.js";
+import { BSPopover } from "cicerone.js/bs-popover";
 import "cicerone.js/dist/style.css";
 import "cicerone.js/dist/bs-popover/style.css";
 

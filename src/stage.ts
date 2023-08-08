@@ -1,19 +1,13 @@
-import {
-  IStage,
-  IStageFocus,
-  IStagePopover,
-  StagePopoverRenderingContext,
-  StageRenderingContext,
-  StageState
-} from "./interface";
-import {createOverlaySvg} from "./svg";
-import {onDriverClick} from "./unclassified";
+import { IStage, IStageFocus, IStagePopover, StagePopoverRenderingContext, StageRenderingContext, StageState } from "./interface";
+import { createOverlaySvg } from "./svg";
+import { onOverlayClick } from "./unclassified";
 
 export class Stage implements IStage {
   private focuses: IStageFocus[];
   private popovers?: IStagePopover[];
-  private stageRenderingContext!: StageRenderingContext;
+  private renderingContext!: StageRenderingContext;
   private overlaySvg?: SVGSVGElement;
+  private overlayListener?: () => void | undefined = undefined;
 
   constructor(state: StageState) {
     this.focuses = state.focuses;
@@ -26,8 +20,9 @@ export class Stage implements IStage {
   private get stagePopoverRenderingContext(): StagePopoverRenderingContext {
     return {
       focuses: this.focuses,
-      rootEl: this.stageRenderingContext.rootEl,
-      sharedConfig: this.stageRenderingContext.sharedConfig,
+      rootEl: this.renderingContext.rootEl,
+      sharedConfig: this.renderingContext.sharedConfig,
+      eventEmitter: this.renderingContext.eventEmitter,
     }
   }
 
@@ -35,20 +30,32 @@ export class Stage implements IStage {
    * Destroy the highlight area
    */
   public destroy() {
-
+    if (this.overlaySvg) {
+      this.overlaySvg.remove()
+      this.overlaySvg = undefined
+    }
+    if (this.overlayListener) {
+      this.overlayListener()
+      this.overlayListener = undefined
+    }
+    if (this.popovers) {
+      this.popovers.forEach(popover => {
+        popover.render(this.stagePopoverRenderingContext)
+      })
+    }
   }
 
   /**
    * Draw the highlight area
    */
   public render(context: StageRenderingContext) {
-    this.stageRenderingContext = context;
+    this.renderingContext = context;
     this.destroy();
 
     this.overlaySvg = createOverlaySvg(this.focuses[0].rect())
-    this.stageRenderingContext.rootEl.appendChild(this.overlaySvg)
-    onDriverClick(this.overlaySvg, e => {
-      console.log(this.overlaySvg)
+    this.renderingContext.rootEl.appendChild(this.overlaySvg)
+    this.overlayListener = onOverlayClick(this.overlaySvg, e => {
+      this.renderingContext.eventEmitter.emit("overlay:click", e)
     })
 
     if (this.popovers) {

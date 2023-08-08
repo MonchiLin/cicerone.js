@@ -1,5 +1,5 @@
-<script setup lang="ts">
-import {highlightElement, Placement} from 'cicerone.js'
+<script lang="ts" setup>
+import { highlightElement, Placement } from 'cicerone.js'
 
 let count = 0;
 const highlight = (event: Event, placement: Placement) => {
@@ -16,19 +16,19 @@ const highlight = (event: Event, placement: Placement) => {
 <template>
   <div class="w-screen h-screen flex flex-col items-center justify-center">
     <view class="flex flex-row items-center justify-between">
-      <span @click="highlight($event, 'top-start')" class="border-1 border">TopStart</span>
-      <span @click="highlight($event, 'top-start')" class="border-1 border ml-[10px]">TopCenter</span>
-      <span @click="highlight($event, 'top-start')" class="border-1 border ml-[10px]">TopEnd</span>
+      <span class="border-1 border" @click="highlight($event, 'top-start')">TopStart</span>
+      <span class="border-1 border ml-[10px]" @click="highlight($event, 'top-start')">TopCenter</span>
+      <span class="border-1 border ml-[10px]" @click="highlight($event, 'top-start')">TopEnd</span>
     </view>
     <view class="flex flex-row items-center justify-between mt-[10px]">
-      <span @click="highlight($event, 'top-start')" class="border-1 border">LeftStart</span>
-      <span @click="highlight($event, 'top-start')" class="border-1 border ml-[10px]">LeftCenter</span>
-      <span @click="highlight($event, 'top-start')" class="border-1 border ml-[10px]">LeftEnd</span>
+      <span class="border-1 border" @click="highlight($event, 'top-start')">LeftStart</span>
+      <span class="border-1 border ml-[10px]" @click="highlight($event, 'top-start')">LeftCenter</span>
+      <span class="border-1 border ml-[10px]" @click="highlight($event, 'top-start')">LeftEnd</span>
     </view>
     <view class="flex flex-row items-center justify-between mt-[10px]">
-      <span @click="highlight($event, 'top-start')" class="border-1 border">RightStart</span>
-      <span @click="highlight($event, 'top-start')" class="border-1 border ml-[10px]">RightCenter</span>
-      <span @click="highlight($event, 'top-start')" class="border-1 border ml-[10px]">RightEnd</span>
+      <span class="border-1 border" @click="highlight($event, 'top-start')">RightStart</span>
+      <span class="border-1 border ml-[10px]" @click="highlight($event, 'top-start')">RightCenter</span>
+      <span class="border-1 border ml-[10px]" @click="highlight($event, 'top-start')">RightEnd</span>
     </view>
   </div>
 </template>

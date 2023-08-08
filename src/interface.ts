@@ -1,19 +1,17 @@
-import type {OffsetsFunction, Placement, Rect} from "./re-export";
+import type { OffsetsFunction, Placement, Rect } from "./re-export";
+import type { TypedEvent } from "./typed-event";
 
 export interface StageRenderingContext {
   readonly rootEl: HTMLElement;
   readonly sharedConfig: SharedConfig;
+  readonly eventEmitter: TypedEvent<CiceroneEvents>;
 }
 
 export interface StagePopoverRenderingContext {
   readonly rootEl: HTMLElement;
   readonly focuses: IStageFocus[];
   readonly sharedConfig: SharedConfig;
-}
-
-export interface StageFocusRenderingContext {
-  readonly rootEl: HTMLElement;
-  readonly sharedConfig: SharedConfig;
+  readonly eventEmitter: TypedEvent<CiceroneEvents>;
 }
 
 export type StageFocusCtorParams = {
@@ -22,15 +20,19 @@ export type StageFocusCtorParams = {
 
 export interface IStage {
   render(context: StageRenderingContext): void
+  destroy(): void
 }
 
 export interface IStagePopover {
   render(popoverRenderingContext: StagePopoverRenderingContext): void
+  destroy(): void
 }
 
 export interface IStageFocus {
   rect(): Rect;
 }
+
+export type CiceroneEvents = "overlay:click"
 
 /**
  *
@@ -89,6 +91,3 @@ export interface SchedulerState extends SharedConfig {
 export interface CiceroneGlobalConfig extends SharedConfig {
 }
 
-export interface AssembleConfig extends SharedConfig {
-  focusElements: FocusElement[][]
-}

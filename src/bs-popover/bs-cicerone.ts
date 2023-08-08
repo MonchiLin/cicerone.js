@@ -1,25 +1,48 @@
-import {Cicerone} from "../cicerone";
-import {StageFocus} from "../stage-focus";
-import {AssembleConfig} from "../interface";
-import {toFocusElementState} from "../unclassified";
-import {Stage} from "../stage";
+import { Cicerone } from "../cicerone";
+import { StageFocus } from "../stage-focus";
+import { FocusElement, SharedConfig } from "../interface";
+import { toFocusElementState } from "../unclassified";
+import { Stage } from "../stage";
+import { Placement } from "../re-export";
+import { BSPopover } from "./bs-popover";
+
+export interface BSPopoverConfig {
+  title?: string
+  description?: string
+  placement?: Placement
+  nextBtnText?: string;
+  prevBtnText?: string;
+  doneBtnText?: string;
+}
+
+export interface BSAssembleConfig extends SharedConfig {
+  focusElements: FocusElement[][];
+  popoverConfigs: BSPopoverConfig[][];
+}
 
 export namespace BSCicerone {
-  export function assemble(state: AssembleConfig): Cicerone {
-    const stages = state.focusElements.map(focusElements => {
+  export function assemble(assembleConfig: BSAssembleConfig): Cicerone {
+    const stages = assembleConfig.focusElements.map((focusElements, index) => {
 
       const focuses = focusElements.map(focusElement => new StageFocus({
         focusElementState: toFocusElementState(focusElement),
       }))
 
+      const popovers = assembleConfig.popoverConfigs[index].map(popoverConfig => {
+        return new BSPopover({
+          title: popoverConfig.title,
+          description: popoverConfig.description,
+        })
+      })
+
       return new Stage({
         focuses: focuses,
-        popovers: [],
+        popovers: popovers,
       })
     })
 
     return new Cicerone({
-      ...state,
+      ...assembleConfig,
       stages: stages,
     })
   }

@@ -36,7 +36,6 @@ Tour guide
 
 并且在点击下一步时, *好价* 将会被高亮, 在本库的设计理念中, *好物社区* 和 *好价* 都是场景.
 
-
 ## 多区域高亮
 
 目前世面上的 tour 库([driver.js](https://driverjs.com/)/[introjs](https://introjs.com/)/[bootstraptour](https://bootstraptour.com/))基本都是单区域高亮的设计, 但是在实际的业务场景中, 有时候需要同时高亮多个区域, 所以 cicerone.js 采用了多区域设计.

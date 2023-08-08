@@ -1,8 +1,8 @@
-import type {FocusElementState, SharedConfig} from "./interface";
-import {FocusElement} from "./interface";
-import {Cicerone} from "./cicerone";
-import {StageFocus} from "./stage-focus";
-import {Stage} from "./stage";
+import type { FocusElementState, SharedConfig } from "./interface";
+import { FocusElement } from "./interface";
+import { Cicerone } from "./cicerone";
+import { StageFocus } from "./stage-focus";
+import { Stage } from "./stage";
 
 /**
  * Convert a Stage to a Rect
@@ -34,7 +34,7 @@ export const toFocusElementState = (focusElement: FocusElement): FocusElementSta
 }
 
 /**
- * Convert a Stage to a Rect
+ * Convert Stages to Rects
  * @param stage
  */
 export const toFocusElementStateMany = (stage: FocusElement[]): FocusElementState[] => {
@@ -42,20 +42,19 @@ export const toFocusElementStateMany = (stage: FocusElement[]): FocusElementStat
 }
 
 /**
- * Attaches click handler to the elements created by driver.js. It makes
- * sure to give the listener the first chance to handle the event, and
- * prevents all other pointer-events to make sure no external-library
- * ever knows the click happened.
+ * The function rewrite from [driver.js](https://github.com/kamranahmedse/driver.js)
+ * Thanks to the original author
  *
  * @param {Element} element Element to listen for click events
  * @param {(pointer: MouseEvent | PointerEvent) => void} listener Click handler
  * @param {(target: HTMLElement) => boolean} shouldPreventDefault Whether to prevent default action i.e. link clicks etc
+ * @returns {() => void} Function to remove the listener
  */
-export function onDriverClick(
+export function onOverlayClick(
   element: Element,
   listener: (pointer: MouseEvent | PointerEvent) => void,
   shouldPreventDefault?: (target: HTMLElement) => boolean
-) {
+): () => void {
   const listenerWrapper = (e: MouseEvent | PointerEvent, listener?: (pointer: MouseEvent | PointerEvent) => void) => {
     const target = e.target as HTMLElement;
     if (!element.contains(target)) {
@@ -88,6 +87,14 @@ export function onDriverClick(
     },
     useCapture
   );
+
+  return () => {
+    document.removeEventListener("pointerdown", listenerWrapper, useCapture);
+    document.removeEventListener("mousedown", listenerWrapper, useCapture);
+    document.removeEventListener("pointerup", listenerWrapper, useCapture);
+    document.removeEventListener("mouseup", listenerWrapper, useCapture);
+    document.removeEventListener("click", listenerWrapper, useCapture);
+  }
 }
 
 export function highlightElement(focusElement: FocusElement, config: SharedConfig = {}) {

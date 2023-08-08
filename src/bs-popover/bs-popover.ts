@@ -1,10 +1,6 @@
-import {StagePopover} from "../stage-popover";
-import {StageRenderingContext} from "../interface";
-
-export interface BSPopoverOptions {
-  title: string,
-  content: string,
-}
+import { StagePopover } from "../stage-popover";
+import { StageRenderingContext } from "../interface";
+import { BSPopoverConfig } from "./bs-cicerone";
 
 /**
  * A Bootstrap Tour Popover implementation
@@ -18,10 +14,13 @@ export class BSPopover extends StagePopover {
   private navigation!: HTMLElement;
   private renderContext!: StageRenderingContext;
 
-  constructor(private options: BSPopoverOptions) {
+  constructor(private options: BSPopoverConfig) {
     super();
   }
 
+  destroy() {
+    this.renderContext.rootEl.removeChild(this.box);
+  }
 
   render(context: StageRenderingContext) {
     this.renderContext = context
@@ -32,10 +31,6 @@ export class BSPopover extends StagePopover {
   }
 
   private renderBox() {
-    if (this.box) {
-      this.renderContext.rootEl.removeChild(this.box);
-    }
-
     this.box = document.createElement("div");
     this.box.classList.add("bs-popover");
     this.renderContext.rootEl.appendChild(this.box);
@@ -48,7 +43,7 @@ export class BSPopover extends StagePopover {
 
     this.header = document.createElement("div");
     this.header.classList.add("bs-popover__header");
-    this.header.textContent = this.options.title;
+    this.header.textContent = this.options.title ?? "";
     this.box.appendChild(this.header);
   }
 
@@ -59,7 +54,7 @@ export class BSPopover extends StagePopover {
 
     this.content = document.createElement("div");
     this.content.classList.add("bs-popover__content");
-    this.content.textContent = this.options.content;
+    this.content.textContent = this.options.description ?? "";
     this.box.appendChild(this.content);
   }
 

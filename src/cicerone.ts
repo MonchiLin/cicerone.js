@@ -1,13 +1,24 @@
-import {AssembleConfig, IStage, SchedulerState, SharedConfig, StageRenderingContext} from "./interface";
-import {Stage} from "./stage";
-import {StageFocus} from "./stage-focus";
-import {toFocusElementState} from "./unclassified";
+import { CiceroneEvents, IStage, SchedulerState, SharedConfig, StageRenderingContext } from "./interface";
+import { TypedEvent } from "./typed-event";
+import { CiceroneGlobal } from "./global";
 
 export class Cicerone {
   public stageIndex: number;
   private rootEl: HTMLElement;
   private stages: IStage[];
   private sharedConfig: SharedConfig;
+  private eventEmitter: TypedEvent<CiceroneEvents>;
+
+  /**
+   * Declare as a member, avoid 'this' binding
+   * @param e
+   */
+  private onOverlayClick = (e: MouseEvent | PointerEvent) => {
+    this.sharedConfig.onOverlayClick?.(e);
+    if (this.sharedConfig.maskClosable) {
+      this.destroy();
+    }
+  }
 
   constructor(state: SchedulerState) {
     this.stages = state.stages;
@@ -16,11 +27,13 @@ export class Cicerone {
       this.rootEl = state.rootEl;
     } else {
       this.rootEl = document.createElement("div");
-      this.rootEl.classList.add("cable-car")
+      this.rootEl.classList.add("cicerone-root")
+      this.rootEl.style.zIndex = String(state.zIndex ?? CiceroneGlobal.zIndex ?? 1000)
       document.body.appendChild(this.rootEl)
     }
 
     this.stageIndex = 0;
+    this.eventEmitter = new TypedEvent<CiceroneEvents>()
 
     this.sharedConfig = {
       maskClosable: state.maskClosable,
@@ -32,43 +45,20 @@ export class Cicerone {
       popoverOffset: state.popoverOffset,
       zIndex: state.zIndex,
     }
-  }
 
-  public static assemble (state: AssembleConfig): Cicerone {
-    const stages = state.focusElements.map(focusElements => {
-
-      const focuses = focusElements.map(focusElement => new StageFocus({
-        focusElementState: toFocusElementState(focusElement),
-      }))
-
-      return new Stage({
-        focuses: focuses,
-        popovers: [],
-      })
-    })
-
-    return new Cicerone({
-      ...state,
-      stages: stages,
-    })
+    this.eventEmitter.on("overlay:click", this.onOverlayClick)
   }
 
   private get renderingContext(): StageRenderingContext {
     return {
       rootEl: this.rootEl,
       sharedConfig: this.sharedConfig,
+      eventEmitter: this.eventEmitter,
     }
   }
 
   public bootstrap() {
     this.render();
-  }
-
-  /**
-   * Start the tourist guide
-   */
-  private render() {
-    this.stages[this.stageIndex].render(this.renderingContext)
   }
 
   /**
@@ -108,7 +98,18 @@ export class Cicerone {
    * Destroy the scheduler
    */
   public destroy() {
+    this.stages.forEach(stage => {
+      stage.destroy();
+    })
+    this.eventEmitter.destroy();
+    this.rootEl.remove();
+  }
 
+  /**
+   * Start the tourist guide
+   */
+  private render() {
+    this.stages[this.stageIndex].render(this.renderingContext)
   }
 
 }

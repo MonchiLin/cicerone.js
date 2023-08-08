@@ -1,5 +1,5 @@
-import {FocusElementState, IStageFocus, StageFocusCtorParams, StageRenderingContext} from "./interface";
-import {Rect} from "./re-export";
+import { FocusElementState, IStageFocus, StageFocusCtorParams } from "./interface";
+import { Rect } from "./re-export";
 
 export class StageFocus implements IStageFocus {
   private focusElementState: FocusElementState;

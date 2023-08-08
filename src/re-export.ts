@@ -1,6 +1,17 @@
-import type {Placement as _Placement, Rect as _Rect} from "@popperjs/core";
-import type {OffsetsFunction as _OffsetsFunction} from "@popperjs/core/lib/modifiers/offset";
+export type OffsetsFunction = (arg0: {
+  popper: Rect;
+  reference: Rect;
+  placement: Placement;
+}) => [number | null | undefined, number | null | undefined];
 
-export type Placement = _Placement
-export type Rect = _Rect
-export type OffsetsFunction = _OffsetsFunction
+export  type Rect = {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+};
+
+type BasePlacement = "top" | "bottom" | "right" | "left"
+type AutoPlacement = "auto" | "auto-start" | "auto-end";
+type VariationPlacement = "top-start" | "top-end" | "bottom-start" | "bottom-end" | "right-start" | "right-end" | "left-start" | "left-end";
+export type Placement = AutoPlacement | BasePlacement | VariationPlacement;

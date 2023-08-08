@@ -1,4 +1,4 @@
-import {Rect} from "./re-export";
+import { Rect } from "./re-export";
 
 export function createOverlaySvg(rect: Rect): SVGSVGElement {
   const windowX = window.innerWidth;
@@ -17,7 +17,7 @@ export function createOverlaySvg(rect: Rect): SVGSVGElement {
   svg.style.clipRule = "evenodd";
   svg.style.strokeLinejoin = "round";
   svg.style.strokeMiterlimit = "2";
-  svg.style.zIndex = "10000";
+  svg.style.zIndex = "0";
   svg.style.position = "fixed";
   svg.style.top = "0";
   svg.style.left = "0";
@@ -47,8 +47,8 @@ function generateStageSvgPathString(stage: Rect) {
 
   // const stagePadding = getConfig("stagePadding") || 0;
   // const stageRadius = getConfig("stageRadius") || 0;
-  const stagePadding =  10;
-  const stageRadius =  0;
+  const stagePadding = 0;
+  const stageRadius = 0;
 
   const stageWidth = stage.width + stagePadding * 2;
   const stageHeight = stage.height + stagePadding * 2;

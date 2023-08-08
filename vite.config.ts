@@ -1,4 +1,4 @@
-import {defineConfig} from "vite";
+import { defineConfig } from "vite";
 // @ts-ignore
 import packageJson from "./package.json";
 import * as path from "path";
@@ -29,7 +29,7 @@ module.exports = defineConfig({
         'index': path.resolve(__dirname, 'src/index.ts'),
         'bs-popover': path.resolve(__dirname, 'src/bs-popover.ts'),
       }
-      },
+    },
   },
   plugins: [
     dts({
@@ -37,8 +37,8 @@ module.exports = defineConfig({
     }),
     copyFiles({
       files: [
-        { src: 'src/style.css', dest: 'dist/style.css' },
-        { src: 'src/bs-popover/style.css', dest: 'dist/bs-popover/style.css' },
+        {src: 'src/style.css', dest: 'dist/style.css'},
+        {src: 'src/bs-popover/style.css', dest: 'dist/bs-popover/style.css'},
       ],
     }),
   ]
