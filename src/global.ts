@@ -1,6 +1,6 @@
 import { CiceroneGlobalConfig } from "./interface";
 
-export const CiceroneGlobal: CiceroneGlobalConfig = {
+export const CiceroneGlobal: Required<CiceroneGlobalConfig> = {
   zIndex: 1000,
   placement: "auto",
   popoverOffset: [0, 0],
@@ -11,6 +11,7 @@ export const CiceroneGlobal: CiceroneGlobalConfig = {
     blur: 5,
   },
   backdropVisibility: true,
-  onOverlayClick: undefined,
+  onOverlayClick: () => {},
+  adjust: (i) => i,
   maskClosable: false,
 }

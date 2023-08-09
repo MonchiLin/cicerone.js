@@ -1,5 +1,4 @@
-import { StagePopover } from "../stage-popover";
-import { StageRenderingContext } from "../interface";
+import { IStagePopover, StageRenderingContext } from "../interface";
 import { BSPopoverConfig } from "./bs-cicerone";
 
 /**
@@ -7,7 +6,7 @@ import { BSPopoverConfig } from "./bs-cicerone";
  * @see https://bootstraptour.com/
  *
  */
-export class BSPopover extends StagePopover {
+export class BSPopover implements IStagePopover {
   private box!: HTMLElement;
   private header!: HTMLElement;
   private content!: HTMLElement;
@@ -15,7 +14,6 @@ export class BSPopover extends StagePopover {
   private renderContext!: StageRenderingContext;
 
   constructor(private options: BSPopoverConfig) {
-    super();
   }
 
   destroy() {

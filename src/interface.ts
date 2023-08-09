@@ -3,14 +3,15 @@ import type { TypedEvent } from "./typed-event";
 
 export interface StageRenderingContext {
   readonly rootEl: HTMLElement;
-  readonly sharedConfig: SharedConfig;
+  readonly sharedConfig: Required<CiceroneGlobalConfig>;
   readonly eventEmitter: TypedEvent<CiceroneEvents>;
+  readonly adjust?: (svg: SVGElement) => SVGAElement;
 }
 
 export interface StagePopoverRenderingContext {
   readonly rootEl: HTMLElement;
   readonly focuses: IStageFocus[];
-  readonly sharedConfig: SharedConfig;
+  readonly sharedConfig: Required<CiceroneGlobalConfig>;
   readonly eventEmitter: TypedEvent<CiceroneEvents>;
 }
 
@@ -20,19 +21,24 @@ export type StageFocusCtorParams = {
 
 export interface IStage {
   render(context: StageRenderingContext): void
+
   destroy(): void
 }
 
 export interface IStagePopover {
   render(popoverRenderingContext: StagePopoverRenderingContext): void
+
   destroy(): void
 }
 
 export interface IStageFocus {
   rect(): Rect;
+  preprocess(svg: SVGElement): void;
+  preDestroy(svg: SVGElement): void;
 }
 
 export type CiceroneEvents = "overlay:click"
+| "stage-focus:render:complete"
 
 /**
  *
@@ -66,13 +72,14 @@ export type BackdropFunction = {
 
 export interface SharedConfig {
   maskClosable?: boolean
-  onOverlayClick?: (e: MouseEvent) => void
+  onOverlayClick?: (e: MouseEvent) => void | undefined
   backdropType?: BackdropType
   backdropFunction?: BackdropFunction
   backdropVisibility?: boolean
   placement?: Placement
   popoverOffset?: OffsetsFunction | [number, number]
   zIndex?: number
+  adjust?: (svg: SVGElement) => SVGElement;
 }
 
 export interface StageState {

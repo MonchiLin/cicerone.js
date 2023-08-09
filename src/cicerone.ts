@@ -6,7 +6,7 @@ export class Cicerone {
   public stageIndex: number;
   private rootEl: HTMLElement;
   private stages: IStage[];
-  private sharedConfig: SharedConfig;
+  private sharedConfig: Required<SharedConfig>;
   private eventEmitter: TypedEvent<CiceroneEvents>;
 
   /**
@@ -14,6 +14,7 @@ export class Cicerone {
    * @param e
    */
   private onOverlayClick = (e: MouseEvent | PointerEvent) => {
+    console.log("overlay click")
     this.sharedConfig.onOverlayClick?.(e);
     if (this.sharedConfig.maskClosable) {
       this.destroy();
@@ -21,31 +22,31 @@ export class Cicerone {
   }
 
   constructor(state: SchedulerState) {
+
+    this.sharedConfig = {
+      maskClosable: state.maskClosable || CiceroneGlobal.maskClosable,
+      onOverlayClick: state.onOverlayClick || CiceroneGlobal.onOverlayClick,
+      backdropType: state.backdropType || CiceroneGlobal.backdropType,
+      backdropFunction: state.backdropFunction || CiceroneGlobal.backdropFunction,
+      backdropVisibility: state.backdropVisibility || CiceroneGlobal.backdropVisibility,
+      placement: state.placement || CiceroneGlobal.placement,
+      popoverOffset: state.popoverOffset || CiceroneGlobal.popoverOffset,
+      zIndex: state.zIndex || CiceroneGlobal.zIndex,
+      adjust: state.adjust || CiceroneGlobal.adjust,
+    }
+
     this.stages = state.stages;
 
     if (state.rootEl) {
       this.rootEl = state.rootEl;
     } else {
       this.rootEl = document.createElement("div");
-      this.rootEl.classList.add("cicerone-root")
-      this.rootEl.style.zIndex = String(state.zIndex ?? CiceroneGlobal.zIndex ?? 1000)
+      this.rootEl.classList.add("cicerone")
       document.body.appendChild(this.rootEl)
     }
 
     this.stageIndex = 0;
     this.eventEmitter = new TypedEvent<CiceroneEvents>()
-
-    this.sharedConfig = {
-      maskClosable: state.maskClosable,
-      onOverlayClick: state.onOverlayClick,
-      backdropType: state.backdropType,
-      backdropFunction: state.backdropFunction,
-      backdropVisibility: state.backdropVisibility,
-      placement: state.placement,
-      popoverOffset: state.popoverOffset,
-      zIndex: state.zIndex,
-    }
-
     this.eventEmitter.on("overlay:click", this.onOverlayClick)
   }
 
@@ -103,12 +104,14 @@ export class Cicerone {
     })
     this.eventEmitter.destroy();
     this.rootEl.remove();
+    document.body.classList.remove("cicerone-html-body")
   }
 
   /**
    * Start the tourist guide
    */
   private render() {
+    document.body.classList.add("cicerone-html-body")
     this.stages[this.stageIndex].render(this.renderingContext)
   }
 

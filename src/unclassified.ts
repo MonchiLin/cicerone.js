@@ -47,27 +47,21 @@ export const toFocusElementStateMany = (stage: FocusElement[]): FocusElementStat
  *
  * @param {Element} element Element to listen for click events
  * @param {(pointer: MouseEvent | PointerEvent) => void} listener Click handler
- * @param {(target: HTMLElement) => boolean} shouldPreventDefault Whether to prevent default action i.e. link clicks etc
  * @returns {() => void} Function to remove the listener
  */
 export function onOverlayClick(
   element: Element,
   listener: (pointer: MouseEvent | PointerEvent) => void,
-  shouldPreventDefault?: (target: HTMLElement) => boolean
 ): () => void {
   const listenerWrapper = (e: MouseEvent | PointerEvent, listener?: (pointer: MouseEvent | PointerEvent) => void) => {
-    const target = e.target as HTMLElement;
-    if (!element.contains(target)) {
-      return;
+    // 判断点击区域是否处于 element 内部
+    const x = e.clientX;
+    const y = e.clientY;
+    const rect = element.getBoundingClientRect();
+    const isInRect = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+    if (isInRect) {
+      listener?.(e);
     }
-
-    if (!shouldPreventDefault || shouldPreventDefault(target)) {
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-    }
-
-    listener?.(e);
   };
 
   // We want to be the absolute first one to hear about the event

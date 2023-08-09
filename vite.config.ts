@@ -16,7 +16,7 @@ const getPackageNameCamelCase = () => {
 module.exports = defineConfig({
   base: "./",
   build: {
-    cssCodeSplit: false,
+    minify: false,
     lib: {
       entry: ['src/index.ts', 'src/bs-popover.ts'],
       name: getPackageNameCamelCase(),

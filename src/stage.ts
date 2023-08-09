@@ -1,5 +1,5 @@
 import { IStage, IStageFocus, IStagePopover, StagePopoverRenderingContext, StageRenderingContext, StageState } from "./interface";
-import { createOverlaySvg } from "./svg";
+import { createFocusSvg, createOverlay } from "./svg";
 import { onOverlayClick } from "./unclassified";
 
 export class Stage implements IStage {
@@ -8,6 +8,11 @@ export class Stage implements IStage {
   private renderingContext!: StageRenderingContext;
   private overlaySvg?: SVGSVGElement;
   private overlayListener?: () => void | undefined = undefined;
+  /**
+   * Current rendering focuses SVGs
+   * @private
+   */
+  private focusesSVGs: SVGElement[] = [];
 
   constructor(state: StageState) {
     this.focuses = state.focuses;
@@ -51,9 +56,15 @@ export class Stage implements IStage {
   public render(context: StageRenderingContext) {
     this.renderingContext = context;
     this.destroy();
+    this.overlaySvg = createOverlay(this.renderingContext.sharedConfig)
+    this.focuses.forEach(focus => {
+      const focusSVG = this.renderingContext.sharedConfig.adjust(createFocusSvg(focus, this.renderingContext.sharedConfig))
+      focus.preprocess(focusSVG)
+      this.overlaySvg!.appendChild(focusSVG)
+    })
 
-    this.overlaySvg = createOverlaySvg(this.focuses[0].rect())
     this.renderingContext.rootEl.appendChild(this.overlaySvg)
+
     this.overlayListener = onOverlayClick(this.overlaySvg, e => {
       this.renderingContext.eventEmitter.emit("overlay:click", e)
     })
