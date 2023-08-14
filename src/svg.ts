@@ -5,7 +5,7 @@ export function createOverlay(config: Required<CiceroneGlobalConfig>): SVGSVGEle
   const windowY = window.innerHeight;
 
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.classList.add("driver-overlay", "driver-overlay-animated");
+  svg.classList.add("cicerone-overlay", "cicerone-overlay-animated");
 
   svg.setAttribute("viewBox", `0 0 ${windowX} ${windowY}`);
   svg.setAttribute("xmlSpace", "preserve");

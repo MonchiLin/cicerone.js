@@ -9,3 +9,21 @@
 .cicerone-focus {
   pointer-events: auto;
 }
+
+
+.cicerone-overlay {
+  animation: fadeBackground 500ms 1;
+}
+
+.cicerone-overlay-animated {
+
+}
+
+@keyframes fadeBackground {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { highlightElement, Placement } from 'cicerone.js'
+import { Placement } from 'cicerone.js'
+import { BSCicerone } from 'cicerone.js/bs-popover'
 
 let count = 0;
 const highlight = (event: Event, placement: Placement) => {
@@ -7,8 +8,18 @@ const highlight = (event: Event, placement: Placement) => {
     return
   }
 
-  const cicerone = highlightElement(event.target!, {placement: placement})
-  cicerone.bootstrap()
+  // const cicerone = highlightElement(event.target! as Element, {placement: placement, maskClosable: true})
+  // cicerone.bootstrap()
+  BSCicerone
+    .assemble({
+      focusElements: [[event.target! as Element]],
+      popoverConfigs: [
+        {
+          title: "test"
+        }
+      ]
+    })
+    .bootstrap()
 }
 
 </script>

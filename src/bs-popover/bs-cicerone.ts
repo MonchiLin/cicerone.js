@@ -17,7 +17,7 @@ export interface BSPopoverConfig {
 
 export interface BSAssembleConfig extends SharedConfig {
   focusElements: FocusElement[][];
-  popoverConfigs: BSPopoverConfig[][];
+  popoverConfigs: BSPopoverConfig[];
 }
 
 export namespace BSCicerone {
@@ -28,16 +28,14 @@ export namespace BSCicerone {
         focusElementState: toFocusElementState(focusElement),
       }))
 
-      const popovers = assembleConfig.popoverConfigs[index].map(popoverConfig => {
-        return new BSPopover({
-          title: popoverConfig.title,
-          description: popoverConfig.description,
-        })
+      const popovers = new BSPopover({
+        title: assembleConfig.popoverConfigs[index].title,
+        description: assembleConfig.popoverConfigs[index].description,
       })
 
       return new Stage({
         focuses: focuses,
-        popovers: popovers,
+        popovers: [popovers],
       })
     })
 

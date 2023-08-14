@@ -14,7 +14,6 @@ export class Cicerone {
    * @param e
    */
   private onOverlayClick = (e: MouseEvent | PointerEvent) => {
-    console.log("overlay click")
     this.sharedConfig.onOverlayClick?.(e);
     if (this.sharedConfig.maskClosable) {
       this.destroy();
